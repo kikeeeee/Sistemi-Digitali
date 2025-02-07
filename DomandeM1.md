@@ -16,7 +16,8 @@
 
 <details>
   <summary>Definizione e utilizzo FMA</summary>
-  FMA (Fused Multiply-Add) è un'operazione che esegue una moltiplicazione seguita da un'addizione con un solo arrotondamento, migliorando la precisione.
+  Introduciamo inizialmente la MAC, multiply and accumulate, una moltiplicazione seguita da un addizione del tipo Temp = A x B ; Z = Temp + C. Questo approccio convenzionale, esegue due approssimazioni ( che abbiamo visto essere delicate durante calcoli tra FP ).
+  Per risolvere questo problema introduciamo FMA (Fused Multiply-Add) è un'operazione che esegue una moltiplicazione seguita da un'addizione in un unico step : Z = A x B + C con un solo arrotondamento senza dover rappresentare la variabile intermedia; nonostante la FMA sia piu dispendiosa a livello di hardware, migliora la precisione e accuratezza,e la rende tendenzialmente piu veloce rispetto alla MAC.
 </details>
 
 <details>
