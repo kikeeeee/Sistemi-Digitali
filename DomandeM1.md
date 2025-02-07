@@ -1,14 +1,12 @@
 # MATTOCCIA #
 <details>
   <summary>Calcolare il valore decimale di un floating point dato</summary>
-  La conversione di un numero floating point in decimale avviene decomponendo il numero nelle sue tre componenti: segno, esponente e mantissa. Utilizzando la formula:
-  \[ (-1)^S \times M \times 2^E \]
-  dove \( S \) è il bit di segno, \( M \) è la mantissa normalizzata e \( E \) è l'esponente.
+  
 </details>
 
 <details>
   <summary>Numeri subnormali</summary>
-  I numeri subnormali sono numeri floating point con un esponente minimo e una mantissa non nulla. Servono per rappresentare numeri molto piccoli e migliorare la gradualità dell'arrotondamento vicino allo zero.
+  sono un sottoinsieme di numeri a virgola mobile utilizzati per rappresentare valori molto piccoli, prossimi a zero, che non possono essere codificati nel formato normalizzato standard, sappiamo che più ci avviciniamo allo zero, più l'accuracy aumenta, questo però non vale all'infinito, in quanto non si può avere un esponente negativo infinito, di conseguenza per toccare lo zero bisogna utilizzare i numeri **subnormali(denormalizzati)**; quando infatti un esponente di avvicina al valore minimo **-expmin**, la notazione scientifica porterebbe ad un buco tra 0 e 2^-expmin, di conseguenza si introducono i numeri subnormali come **x = 0.m x 10^-expmin**, piu la mantissa è piccola piu mi avvicino a zero.
 </details>
 
 <details>
