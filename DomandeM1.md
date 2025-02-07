@@ -28,23 +28,13 @@ La mantissa quindi rappresenta il valore, spesso normalizzato in notazione scien
 </details>
 
 <details>
-  <summary>"Trucco" utilizzato da CORDIC subnormali</summary>
+  <summary>Cordic e "Trucco" subnormali</summary>
   Il CORDIC usa iterazioni successive per calcolare funzioni trigonometriche ed esponenziali con operazioni di somma e shift.
 </details>
 
 <details>
   <summary>FPGA (anche che tipi di memorie hanno)</summary>
   Le FPGA utilizzano vari tipi di memoria come BRAM, DRAM ed EEPROM per archiviare dati e configurazioni.
-</details>
-
-<details>
-  <summary>CORDIC gain</summary>
-  Il gain del CORDIC è un fattore di scala introdotto dalle iterazioni successive dell'algoritmo.
-</details>
-
-<details>
-  <summary>Weight sharing</summary>
-  Il Weight Sharing è una tecnica per ridurre la memoria nei modelli di deep learning comprimendo i pesi attraverso la quantizzazione o la condivisione.
 </details>
 
 <details>
@@ -69,10 +59,13 @@ La mantissa quindi rappresenta il valore, spesso normalizzato in notazione scien
 
 <details>
   <summary>Weight Sharing (relativa al mio progetto)</summary>
-  La tecnica di Weight Sharing nel tuo progetto potrebbe ridurre la memoria necessaria comprimendo i pesi di una rete neurale.
 </details>
 
 <details>
   <summary>Tecniche per ridurre la memoria usata da un software</summary>
-  Tecniche comuni includono la quantizzazione, la compressione dei dati e la riduzione della precisione dei numeri rappresentati.
+1) Quantizzazione dei Dati
+  Passare per esempio da FP32 a E5M2 riduce la memory footprint di 1/4, con il difetto che la rete risultante sara molto meno accurata di quella originale e necessiterà di un fine tuning.
+2) Weight Sharing o Paletizzation
+  Tecnica per ridurre il consumo di memoria utilizzando un n
+3) Utilizzazione di Interi o Fixed Point
 </details>
