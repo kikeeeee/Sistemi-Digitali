@@ -10,34 +10,37 @@
 </details>
 
 <details>
-  <summary>Calcolo di un numero floating point</summary>
-  Un numero floating point si calcola decomponendolo in segno, esponente e mantissa, e applicando la formula standard del formato IEEE 754.
-</details>
-
-<details>
   <summary>Definizione e utilizzo FMA</summary>
   Introduciamo inizialmente la MAC, multiply and accumulate, una moltiplicazione seguita da un addizione del tipo Temp = A x B ; Z = Temp + C. Questo approccio convenzionale, esegue due approssimazioni ( che abbiamo visto essere delicate durante calcoli tra FP ).
   Per risolvere questo problema introduciamo FMA (Fused Multiply-Add) è un'operazione che esegue una moltiplicazione seguita da un'addizione in un unico step : Z = A x B + C con un solo arrotondamento senza dover rappresentare la variabile intermedia; nonostante la FMA sia piu dispendiosa a livello di hardware, migliora la precisione e accuratezza,e la rende tendenzialmente piu veloce rispetto alla MAC.
 </details>
 
 <details>
-  <summary>Che numero è questo? (conversione FP - decimale)</summary>
-  La conversione da floating point a decimale si ottiene analizzando la codifica IEEE 754 e ricostruendo il valore numerico.
-</details>
-
-<details>
-  <summary>FMA (accurancy, un solo rounding, numero di istruzioni ridotto)</summary>
-  L'FMA è utile perché riduce il numero di arrotondamenti e istruzioni, aumentando la precisione e l'efficienza dei calcoli.
-</details>
-
-<details>
-  <summary>FMA Fixed Point, vantaggi e svantaggi</summary>
-  Il Fixed Point con FMA ha il vantaggio di migliorare l'efficienza computazionale, ma può introdurre limitazioni nella rappresentazione dei valori.
-</details>
-
-<details>
   <summary>Floating Point, vantaggi e svantaggi, codifica esponente</summary>
-  Il floating point consente di rappresentare un ampio intervallo di numeri con precisione variabile, ma introduce errori di arrotondamento e una maggiore complessità hardware.
+  # Rappresentazione in Virgola Mobile (Base 10)
+
+La rappresentazione in virgola mobile è un metodo che consente di esprimere numeri con ampiezze molto diverse, utilizzando un numero fisso di cifre significative. Questo approccio si basa sulla formula:
+
+\[
+N = (-1)^s \times \text{Val} \times 10^{\text{exp}}
+\]
+
+In questa espressione, \( (-1)^s \) determina il segno del numero: se \( s = 0 \) il numero è positivo, mentre se \( s = 1 \) il numero è negativo. La parte \(\text{Val}\) rappresenta la mantissa normalizzata, cioè le cifre significative del numero, e \(10^{\text{exp}}\) indica come la posizione della virgola (o del punto decimale) deve essere spostata per ottenere il valore corretto.
+
+Il termine "virgola mobile" nasce proprio dalla possibilità di spostare la virgola: in un sistema a virgola fissa la posizione della virgola è determinata in anticipo, il che limita la rappresentazione di numeri molto grandi o molto piccoli. Invece, grazie all'esponente, la virgola può essere "spostata" in avanti o indietro, adattando dinamicamente il numero alla scala necessaria.
+
+Ad esempio, consideriamo il numero 123.45. Per rappresentarlo in forma normalizzata, spostiamo la virgola in modo tale che la mantissa sia compresa tra 1 e 10. In questo caso, lo scriviamo come:
+
+\[
+123.45 = 1.2345 \times 10^2
+\]
+
+Qui, la virgola è stata spostata di due posizioni a sinistra per ottenere la mantissa 1.2345, e l'esponente \(2\) ci dice esattamente quante posizioni sono state spostate. Se l'esponente fosse negativo, ciò significherebbe che la virgola è stata spostata verso sinistra, ottenendo un numero più piccolo.
+
+L'esponente, quindi, è essenziale perché determina la scala del numero: un esponente positivo sposta la virgola a destra, aumentando il valore del numero, mentre un esponente negativo sposta la virgola a sinistra, riducendolo. Questo meccanismo consente di mantenere una precisione relativa costante, poiché la mantissa conserva sempre lo stesso numero di cifre significative, indipendentemente dalla grandezza del numero.
+
+Grazie a questa rappresentazione, è possibile gestire numeri di dimensioni estremamente diverse senza perdere informazione rilevante, il che è fondamentale in molti ambiti scientifici e tecnici. La flessibilità offerta dallo spostamento dinamico della virgola permette di esprimere e operare con numeri grandi e piccoli in modo efficiente e preciso.
+
 </details>
 
 <details>
