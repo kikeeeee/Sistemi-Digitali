@@ -22,7 +22,8 @@
   N=Mantissa×Base<sup>Esponente</sup>
   riportando nella formula classica del FP: 
   N=(-1)<sup>s</sup>xMantissa×Base<sup>Esponente</sup>
-
+La mantissa quindi rappresenta il valore, spesso normalizzato in notazione scientifica, del numero; l'esponente invece esprime di quanto debba essere spostata la virgola per ricondursi al numero originale.(Discorso non valido per numeri subnormali).
+  I vantaggi sono molteplici, l'ampio range di dati rappresetabili, una precisione relativa costante ( più il numero è piccolo più è preciso ) e una standard ampiamente adottato, al contempo pero presenta vari difetti, uno su tutti quello dell'approssimazione, in quanto possiamo affermare che quasi tutti i numeri rappredsentati solo solo approssimazioni arrotondate alla codifica piu vicina disponibile; inoltre altri problemi possono essere nelle operazioni, come durante l'addizione tra un numero molto grande ed uno molto piccolo, cercando di adeguare l'esponente del numero piccolo a quello grande il valore piccolo perde sensibilmente precisione, oppure ad esempio sottrarre due numeri molto vicini, con il probabile risultato di un numero approssimato a zero.
   Tra gli svantaggi inoltre inserisco il costo, approssimatamente calcolabile come energia = mantissa<sup>2</sup>
 </details>
 
