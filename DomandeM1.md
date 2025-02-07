@@ -6,7 +6,7 @@
 
 <details>
   <summary>Numeri subnormali</summary>
-  sono un sottoinsieme di numeri a virgola mobile utilizzati per rappresentare valori molto piccoli, prossimi a zero, che non possono essere codificati nel formato normalizzato standard, sappiamo che più ci avviciniamo allo zero, più l'accuracy aumenta, questo però non vale all'infinito, in quanto non si può avere un esponente negativo infinito, di conseguenza per toccare lo zero bisogna utilizzare i numeri subnormali(denormalizzati); quando infatti un esponente di avvicina al valore minimo -expmin, la notazione scientifica porterebbe ad un buco tra 0 e 2<sup>-expmin</sup>, di conseguenza si introducono i numeri subnormali come x = 0.m x 10<sup>-expmin</sup> , piu la mantissa è piccola piu mi avvicino a zero.
+  sono un sottoinsieme di numeri a virgola mobile utilizzati per rappresentare valori molto piccoli, prossimi a zero, che non possono essere codificati nel formato normalizzato standard, sappiamo che più ci avviciniamo allo zero, più l'accuracy aumenta, questo però non vale all'infinito, in quanto non si può avere un esponente negativo infinito, di conseguenza per toccare lo zero bisogna utilizzare i numeri subnormali(denormalizzati); quando infatti un esponente di avvicina al valore minimo -expmin, la notazione scientifica porterebbe ad un buco tra 0 e 2<sup>-expmin</sup>, di conseguenza si introducono i numeri subnormali come x = 0.m x 2<sup>-expmin</sup> , piu la mantissa è piccola piu mi avvicino a zero.
 </details>
 
 <details>
