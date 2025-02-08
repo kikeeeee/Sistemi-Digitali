@@ -87,7 +87,7 @@
 </details>
 
 <details>
-  <summary>Pinned memory, UM, UVA</summary>
+  <summary>Pinned memory, UM, UVA e page-fault</summary>
   La pinned memory accelera i trasferimenti tra CPU e GPU, mentre UM e UVA semplificano la gestione della memoria condivisa.
 </details>
 
@@ -118,7 +118,9 @@
 
 <details>
   <summary>Diagramma di Roofline e AI</summary>
-  Il diagramma di Roofline mostra il rapporto tra computazione e accesso alla memoria, mentre l'AI (Arithmetic Intensity) indica l'efficienza del calcolo.
+Il modello roofline è un metodo grafico utile per rappresentare le prestazioni di un algoritmo ( Kernel CUDA ) in relazione alle capacità di calcolo e memoria di un sistema, utile per capire se un algoritmo viene limitato da problemi di calcolo o di accesso in memoria.
+  L'AI ( Aritmetic Intensity ) che compone l'asse delle ascisse sul nostro grafico Roofline, misura il rapporto tra le quantita di operazioni di calcolo e il volume di dati trasferiti da/verso la memoria.
+  AI = FLOPs <fraq>Bytes Trasferiti</fraq>
 </details>
 
 <details>
