@@ -76,8 +76,9 @@
 </details>
 
 <details>
-  <summary>Legge di Little e stati dei warp</summary>
-  La legge di Little descrive il rapporto tra throughput e latenza; i warp possono trovarsi in stati diversi durante l'esecuzione.
+  <summary>Legge di Little e stati dei warp, latency hiding e ILP/TLP</summary>
+  Num Warp ( per nascondere latenza ) = Latenza ( tempo di completamento istruzione) x Throughput ( num di warp eseguiti a ciclo)
+  Latency Hiding tecnica per mascherare i tempi di attesa, attraverso esecuzione concorrente di piu warp ( ILP E TLP ). Scheduler vede quali warp sono in stallo e ne seleziona altri eleggibili.
 </details>
 
 <details>
