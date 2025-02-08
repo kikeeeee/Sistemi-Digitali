@@ -146,4 +146,10 @@
 Pre volta, il parallelismo era a livello di warp, tutti i thread di un warp eseguivano la stessa istruzione, dopodiche il parallelismo è diventato thrad parallelism.
   ITS ( Indipendent Thread Scheduling ) consente piena concorrenza tra thread indipendentemente da warp, avendo un loro PC, 
 </details>
+
+
+<details>
+  <summary>Come accedere a matrice in modo lineare</summary>
+</details>
+
 ```
