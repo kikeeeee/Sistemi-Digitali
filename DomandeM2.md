@@ -120,7 +120,10 @@
   <summary>Diagramma di Roofline e AI</summary>
 Il modello roofline è un metodo grafico utile per rappresentare le prestazioni di un algoritmo ( Kernel CUDA ) in relazione alle capacità di calcolo e memoria di un sistema, utile per capire se un algoritmo viene limitato da problemi di calcolo o di accesso in memoria.
   L'AI ( Aritmetic Intensity ) che compone l'asse delle ascisse sul nostro grafico Roofline, misura il rapporto tra le quantita di operazioni di calcolo e il volume di dati trasferiti da/verso la memoria.
-  AI = FLOPs <fraq>Bytes Trasferiti</fraq>
+  AI = FLOPs / Bytes Trasferiti ; dove FLOPs sono il numero di operazioni in virgola mobile / Volume di dati letti e scritti dalla memoria DRAM.
+  Ciò si paragona con la Soglia (AI) calcolata come il rapporto tra Massima capacita teorica di calcolo per secondo( FLOPs ) e Velocità massima con la quale i dati possono essere trasferiti tra GPU e DRAM.
+Se AI < Bandwith => memory bound
+  Altrimenti compute bound
 </details>
 
 <details>
