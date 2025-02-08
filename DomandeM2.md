@@ -140,4 +140,10 @@
   <summary>Shared Memory vs Cache L1</summary>
   La shared memory è gestita dal programmatore, mentre la cache L1 è automatica e migliora le performance della memoria globale.
 </details>
+
+<details>
+  <summary>Divergenza tra warp pre/post volta</summary>
+Pre volta, il parallelismo era a livello di warp, tutti i thread di un warp eseguivano la stessa istruzione, dopodiche il parallelismo è diventato thrad parallelism.
+  ITS ( Indipendent Thread Scheduling ) consente piena concorrenza tra thread indipendentemente da warp, avendo un loro PC, 
+</details>
 ```
