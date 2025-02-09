@@ -124,8 +124,8 @@ Il Kernel/Griglia child ereditano attributi come SMEM/Cache L1 ( distinte ) e de
 
 <details>
   <summary>Tipi di sincronizzazione</summary>
-  CUDA fornisce sincronizzazione a livello di warp, blocco e griglia tramite __syncthreads(), fence e stream.
-</details>
+3 tipi di sincronizzazione, Host-Device tramite cudaSyncronize , A livello di blocco con syncthread per esempio dopo aver caricato i dati in SMEM,  e livello di warp con syncwarp.
+Fino ad architettura volta tutti i thread di un warp eseguivano le stesse istruzioni in quanto accomunate dallo stesso PC; successivamente alla volta, ogni thread possiede un proprio PC ed è quindi in grado di differire in rami di esecuzione anche all'interno dello stesso warp, questo porta ad un maggior parallelismo pero necessita di una più oculata gestione di punti di sincronizzazione in quanto dobbiamo evitare di utilizzarle in modo sproporzionato ed inserirle in rami condizionali, in quanto potrebbero non entrarci.</details>
 
 <details>
   <summary>Diagramma di Roofline e AI</summary>
@@ -172,7 +172,12 @@ Pre volta, il parallelismo era a livello di warp, tutti i thread di un warp eseg
 
 
 <details>
-  <summary>Come accedere a matrice in modo lineare</summary>
-</details>
+L’accesso alla grid in CUDA può avvenire in due modi principali: lineare o per coordinate, a seconda di come vengono calcolati gli indici dei thread rispetto ai dati da elaborare.
+
+L’accesso lineare alla grid considera tutti i thread come un unico grande array monodimensionale. Ogni thread calcola il proprio indice globale in modo da riferirsi direttamente alla posizione corrispondente nei dati. Questo avviene tramite la formula globalIndex = threadIdx.x + blockIdx.x * blockDim.x, che somma l’indice locale del thread all’offset del blocco a cui appartiene. Questo metodo è molto efficiente per operazioni su array monodimensionali, poiché consente un accesso semplice e coalescente alla memoria globale. Ad esempio, in un kernel che somma due vettori, ogni thread recupera il proprio indice globale e accede alla posizione corrispondente degli array di input e output.
+
+L’accesso per coordinate, invece, sfrutta la struttura a più dimensioni della grid CUDA, utilizzando i valori threadIdx, blockIdx, blockDim e gridDim per determinare la posizione esatta di un thread in una griglia bidimensionale o tridimensionale. Ad esempio, in un kernel che elabora immagini organizzate in una matrice 2D, è preferibile calcolare gli indici separatamente per righe e colonne, usando le formule row = threadIdx.y + blockIdx.y * blockDim.y e col = threadIdx.x + blockIdx.x * blockDim.x. Questo approccio è utile quando i dati da elaborare sono organizzati in strutture multidimensionali, come matrici o volumi 3D, poiché preserva la loro disposizione naturale in memoria e può migliorare la località spaziale degli accessi.
+
+Mentre l’accesso lineare è più semplice ed efficiente per dati monodimensionali, l’accesso per coordinate è essenziale per gestire dati strutturati in più dimensioni senza perdere il riferimento spaziale degli elementi. La scelta del metodo più adatto dipende dalla natura dei dati e dalla configurazione ottimale della grid per massimizzare le prestazioni e il parallelismo della GPU</details>
 
 ```
