@@ -64,8 +64,8 @@ Memoria Condivisa e Cache L1 condividono lo stesso hardware on cip, ma tra loro 
 
 <details>
   <summary>Unified Memory</summary>
-  La Unified Memory permette a CPU e GPU di accedere agli stessi dati senza copie esplicite, gestendo automaticamente i trasferimenti.
-</details>
+  La memoria UM ( Unified Memory ) è uno spazio di memoria virtuale unificato, che permette di accedere agli stessi dati da qualunque processore con un unico puntatore, gestita automaticamente da runtime tramite Page Migration Engine, che trasferisce tramite PCI o NVlink dati da host a device, e gestisce in modo trasparente il trasferimento causato da un eventuale Page Fault => MANAGED MEMORY.L'allocazione avviene in modo lazy, le pagine vengono allocate solo al primo utilizzo e possono migrare in base alle necessità.
+  I vantaggi sono allocazione unica, unico puntatore e semplificazione, gli svantaggi che presenta latenza aggiuntiva, in base al num di page fault</details>
 
 <details>
   <summary>Gerarchia di memoria CUDA</summary>
