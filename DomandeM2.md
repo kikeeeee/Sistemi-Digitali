@@ -2,8 +2,8 @@
 
 <details>
   <summary>Differenza SIMT e SIMD</summary>
-  SIMD esegue la stessa istruzione su più dati contemporaneamente, mentre SIMT permette ai thread di eseguire istruzioni indipendenti all'interno di un warp.
-</details>
+Sono due modelli di esecuzione, il primo prevede un unica istruzione eseguita da piu thread, cio significa che come SIMD un unico flusso di istruzioni governa diversi dati, in questo caso pero ognuno di questi è elaborato da un thread diverso con stato proprio
+SIMD invece esegue lo stesso flusso di istruzioni su piu dati in modo </details>
 
 <details>
   <summary>Warp scheduler e dispatcher</summary>
