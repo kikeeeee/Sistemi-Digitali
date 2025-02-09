@@ -2,8 +2,8 @@
 
 <details>
   <summary>Differenza SIMT e SIMD</summary>
-Sono due modelli di esecuzione, il primo prevede un unica istruzione eseguita da piu thread, cio significa che come SIMD un unico flusso di istruzioni governa diversi dati, in questo caso pero ognuno di questi è elaborato da un thread diverso con stato proprio
-SIMD invece esegue lo stesso flusso di istruzioni su piu dati in modo </details>
+Sono due modelli di esecuzione, il primo prevede un unica istruzione eseguita da piu thread, cio significa che come SIMD un unico flusso di istruzioni governa diversi dati, in questo caso pero ognuno di questi è elaborato da un thread diverso con stato proprio ( in CUDA parallelismo può essere gestito sia a livello di warp che di thread ).
+SIMD invece esegue lo stesso flusso di istruzioni su piu dati in modo parallelo, SIMD inoltre si basa sul principio vettoriale e abbiamo registri che circa come array contengono piu dati sui quali elaborare</details>
 
 <details>
   <summary>Warp scheduler e dispatcher</summary>
