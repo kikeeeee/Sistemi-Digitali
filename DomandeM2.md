@@ -70,7 +70,7 @@ Memoria Condivisa e Cache L1 condividono lo stesso hardware on cip, ma tra loro 
 <details>
   <summary>Gerarchia di memoria CUDA</summary>
 Si compone cosi: 
--Registri -> memoria piu veloce, privata per ogni thread usata per variabili temporanee
+-Registri -> memoria piu veloce, privata per ogni thread usata per variabili temporanee \n
 -Shared Memory -> condivisa tra thread di un blocco per comunicazione e cooperazione
 -Caches -> memoria intermedia automatica, riduce tempi di accesso per dati usati frequentemente
 -Memoria Locale -> privata per ogni thread usata per grandi variabili o registri
