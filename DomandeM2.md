@@ -15,7 +15,10 @@ L’efficienza di questo meccanismo dipende dalla capacità di mantenere un nume
 
 <details>
   <summary>Giga Thread Engine e Occupancy</summary>
-  Il Giga Thread Engine gestisce il contesto e lo scheduling dei thread su GPU, mentre l'occupancy misura il livello di utilizzo delle risorse disponibili.
+Il GigaThread Engine è un componente centrale dell'architettura delle GPU NVIDIA, agisce come scheduler globale per la distribuzione dei blocchi all'interno di un SM, quando viene lanciato un kernel, tenendo presente i limiti architettuturali e la disponibilità delle risorse.
+L'occupancy è il rapporto tra warp attivi e massimo numero di warp supportati per SM, ne misura infatti il grado di risorse effettivamente utilizzate; si divide in occupancy teorica ovvero occupancy massima raggiungibie da un kernel basato sui limiti e configurazioni, e occupancy effettiva che rappresenta il reale numero di warp attivi; aumentare l'occupancy teorica è sicuramente un primo passo verso l'idea di aumentare quella effettiva, che però può risultare comunque inferiore a quella teorica a causa di carico di lavoro sbilanciato tra i blocchi oppure un numero di blocchi lanciati insufficente, questo può essere sia causato da un'errata configurazione della GRID, ma anche da un utilizzo improprio delle risorse ( shared memory ).
+Inoltre tra le cause inseriamo anche le wave, ovvero il numero di blocchi attivi che possono essere eseguiti per SM, se ( tipicamente alla fine dell'esecuzione ) si arriva con un un numero di blocchi rimanenti minore rispetto a quello supportato, l'occupancy andrà per forza a calare.
+
 </details>
 
 <details>
