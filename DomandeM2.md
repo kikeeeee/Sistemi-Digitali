@@ -40,6 +40,8 @@ Memoria temporanea che funghe da canale di comunicazione per tutti i thread di u
 
 <details>
   <summary>Occupancy (Definizione, Teorica VS Effettiva)</summary>
+  L'occupancy è il rapporto tra warp attivi e massimo numero di warp supportati per SM, ne misura infatti il grado di risorse effettivamente utilizzate; si divide in occupancy teorica ovvero occupancy massima raggiungibie da un kernel basato sui limiti e configurazioni, e occupancy effettiva che rappresenta il reale numero di warp attivi; aumentare l'occupancy teorica è sicuramente un primo passo verso l'idea di aumentare quella effettiva, che però può risultare comunque inferiore a quella teorica a causa di carico di lavoro sbilanciato tra i blocchi oppure un numero di blocchi lanciati insufficente, questo può essere sia causato da un'errata configurazione della GRID, ma anche da un utilizzo improprio delle risorse ( shared memory ).
+Inoltre tra le cause inseriamo anche le wave, ovvero il numero di blocchi attivi che possono essere eseguiti per SM, se ( tipicamente alla fine dell'esecuzione ) si arriva con un un numero di blocchi rimanenti minore rispetto a quello supportato, l'occupancy andrà per forza a calare.
 Un altra cosa che puo influenzare occupancy sono i registri, per quanto siano la memoria on chip piu veloce, ce un limite architetturale e vengono allocati dinamicamente tra warp attivi, influenzando l'occupancy; come per la shared memory un minor uso permette di avere piu blocchi concorrenti per SM, e quindi maggior occupancy; se invece si eccede il limite hardware questi vengono spostati in memoria locale, che è collocata nella stessa posizione della memoria globale e presenta alta latenza e bassa banda -> REGISTER SPILLING</details>
 
 <details>
