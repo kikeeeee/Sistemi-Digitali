@@ -90,59 +90,36 @@ Piu si va verso l'alto, piu le memorie sono veloci, con meno latenza, ma meno ca
 </details>
 
 <details>
-  <summary>Struttura fisica della shared memory</summary>
-  La shared memory è divisa in banchi di memoria, con possibili conflitti di bank che rallentano l'accesso.
-</details>
-
-<details>
-  <summary>Warp scheduler vs Dispatcher</summary>
-  Il warp scheduler decide quale warp eseguire, mentre il dispatcher distribuisce i carichi di lavoro tra i multiprocessori.
-</details>
-
-<details>
   <summary>Accesso ai dati nei warp e organizzazione della memoria shared</summary>
-  I warp accedono ai dati tramite accessi coalescenti per massimizzare l'efficienza della memoria shared.
+Istruzioni ed operazioni di memoria sono emesse ed eseguite per Warp, suddivisi per pattern:
+Allineati => i vari indirizzi di accesso alla memoria debbano essere multipli del primo indirizzo di accesso
+Coalescenti => che gli indirizzi di accesso siano contigui
 </details>
 
 <details>
-  <summary>Organizzazione della GDDR e shared memory</summary>
+  <summary>?????????????????????????Organizzazione della GDDR e shared memory</summary>
   La GDDR è usata per la memoria globale, mentre la shared memory è locale a ciascun multiprocessore.
 </details>
 
 <details>
   <summary>Legge di Little e stati dei warp, latency hiding e ILP/TLP</summary>
+  La legge di little permette di calcolare il numero di warp necessari per mascherare la latenza:
   Num Warp ( per nascondere latenza ) = Latenza ( tempo di completamento istruzione) x Throughput ( num di warp eseguiti a ciclo)
   Latency Hiding tecnica per mascherare i tempi di attesa, attraverso esecuzione concorrente di piu warp ( ILP E TLP ). Scheduler vede quali warp sono in stallo e ne seleziona altri eleggibili.
+  ILP e TLP sono due tecniche utilizzate per migliorare l'efficenza, per la prima suddividiamo una in piu istruzioni per eseguirle in modo concorrente ( PIPELINE ) , invece con TLP aumentiamo il numero di thread che possono essere eseguiti contemporaneamente.
 </details>
 
 <details>
-  <summary>ILP e TLP</summary>
-  L'ILP (Instruction Level Parallelism) e il TLP (Thread Level Parallelism) massimizzano l'uso della GPU eseguendo più operazioni in parallelo.
-</details>
-
-<details>
-  <summary>Pinned memory, UM, UVA e page-fault</summary>
-  La pinned memory accelera i trasferimenti tra CPU e GPU, mentre UM e UVA semplificano la gestione della memoria condivisa.
-</details>
-
-<details>
-  <summary>Tipi di variabili e allocazione</summary>
+  <summary>????????????????????Tipi di variabili e allocazione</summary>
   Le variabili possono essere allocate nei registri, shared memory, memoria globale o texture memory.
 </details>
 
 <details>
-  <summary>Accesso in shared memory con e senza bank conflict</summary>
-  Gli accessi senza conflitti di bank sono paralleli ed efficienti, mentre i conflitti rallentano l'accesso.
-</details>
-
-<details>
-  <summary>Accessi allineati e coalescenti in memoria</summary>
-  Gli accessi allineati e coalescenti massimizzano il throughput riducendo gli accessi inefficaci alla memoria globale.
-</details>
-
-<details>
   <summary>Ricorsione in CUDA</summary>
-  CUDA supporta la ricorsione con limitazioni, poiché i kernel non possono eseguire chiamate ricorsive dirette senza uno stack gestito manualmente.
+Prima dell utilizzo di tecniche di ricorsione, la CPU era l'unica in grado di chiamare kernel e quindi c'era un continuo scambio di messaggi poco efficenti, un nuovo kernel ( griglia ) puo essere chiamato da un thread,blocco,griglia.
+  E stato sensibilmente diminuito lo scambio di messaggi tra CPU e GPU mediante :
+  -Dynamic Parallelism: in base alla densità di dati da analizzare, vengono lanciate piu o meno griglie "figlie" con sensibilità maggiore, quindi su "meno dati", gestita autonomamente da GPU.
+Il Kernel/Griglia child ereditano attributi come SMEM/Cache L1 ( distinte ) e devono sempre terminare tutte prima che la Parent sia considerata completa,  inoltre la child è visibile a tutti i thread dello stesso blocco.
 </details>
 
 <details>
@@ -158,11 +135,6 @@ Il modello roofline è un metodo grafico utile per rappresentare le prestazioni 
   Ciò si paragona con la Soglia (AI) calcolata come il rapporto tra Massima capacita teorica di calcolo per secondo( FLOPs ) e Velocità massima con la quale i dati possono essere trasferiti tra GPU e DRAM.
 Se AI < Bandwith => memory bound
   Altrimenti compute bound
-</details>
-
-<details>
-  <summary>Latency Hiding</summary>
-  Il latency hiding maschera i tempi di attesa sfruttando la parallelizzazione e l'overlapping dei calcoli.
 </details>
 
 <details>
