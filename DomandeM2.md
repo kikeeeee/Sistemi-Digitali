@@ -57,6 +57,9 @@ Memoria Condivisa e Cache L1 condividono lo stesso hardware on cip, ma tra loro 
   La configurazione ottimale ( es tramite Carvout ) di queste due dipende da esigenze del kernel:
   -Piu SMEM => ideale per un uso intensivo di SMEM per ridurre latenza di accessi a global memory, attenzione all occupancy
   -Piu Cache => piu utile quando il kernel fa accessi frequenti a dati globali con buona località spaziale, oppure per ottimizzare il register spilling
+
+  L1 -> località spaziale e temporale
+  SMEM -> località spaziale
 </details>
 
 <details>
