@@ -52,11 +52,6 @@ Sia host che device accedono quindi a questa memoria, tramite PCI express, con t
 </details>
 
 <details>
-  <summary>Shared Memory (Struttura, come si accede)</summary>
-  La shared memory è organizzata in banchi e consente accessi rapidi se non ci sono conflitti di bank.
-</details>
-
-<details>
   <summary>Shared Memory VS Cache L1</summary>
 Memoria Condivisa e Cache L1 condividono lo stesso hardware on cip, ma tra loro ci sono differenze fondamentali, sui pattern di accesso, in quanto la SMEM utilizza i 32 banchi per l'accesso parallelo, mentre la cache si basa sulle linee per il caricamento, ed inoltre sul controllo, poichè al contrario della SMEM, la cache L1 non può essere minimamente toccata dal programmatore ed è interamente gestita dall hardware.
   La configurazione ottimale ( es tramite Carvout ) di queste due dipende da esigenze del kernel:
