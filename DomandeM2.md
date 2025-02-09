@@ -22,7 +22,9 @@ Memoria temporanea che funghe da canale di comunicazione per tutti i thread di u
   SMEM è una risorsa limitata che dipende dall architettura di una GPU, un uso eccessivo riduce il numero di blocchi di thread attivi concorrentemente, e quindi limita il parallelismo.
   Dopo ogni elaborazione/caricamento, è necessario eseguire una sincronizzazione in quanto è possibile che altri thread debbano utilizzare quei dati.
   L'allocazione può essere sia dinamica che statica, in base a se la Quantità di SMEM da allocare è nota al momento di compilazione ( variabile extern).
-  Per massimizzare la banda di memoria, la SMEM è divisa in 32 moduli di memoria di ugual dimensione chiamati banchi ( da 4/8 byte in base all architettua)  
+  La memoria è uno spazio di indirizzamento lineare, ma per massimizzare la banda di memoria, la SMEM è divisa in 32 moduli di memoria di ugual dimensione chiamati banchi ( da 4/8 byte in base all architettua) , essi sono 32 in quanto numero di thread di un warp, potendo permettere la lettura simultanea da parte di tutti i thread.
+  -scenario ideale => operazione di lettura o scrittura emessa da un warp accede solo ad un indirizzo per banco, perfetto in quanto in un solo ciclo di clock effettuo tutti i trasferimenti
+  -scenario NON ideale => operazione di lettura o scrittura emessa da un warp accede a piu indirizzi per banco, necessario quindi effettuare piu transazioni di memoria in quanto un banco puo servire al massimo una richiesta
 </details>
 
 <details>
@@ -31,7 +33,9 @@ Un altra cosa che puo influenzare occupancy sono i registri, per quanto siano la
 
 <details>
   <summary>Zero-Copy Memory</summary>
-  La memoria zero-copy permette alla CPU e alla GPU di condividere gli stessi dati senza bisogno di trasferimenti espliciti.
+La memoria zero-copy è una tecnica che consente al device di accedere direttamente alla memoria dell host, senza copiare esplicitamente i dati ( eccezione alle regole di mutua esclusività di memorie CPU e GPU).
+Sia host che device accedono quindi a questa memoria, tramite PCI express, con trasferimenti eseguiti implicitamente quando richiesti dal kernel, è ovviamente necessario Sincronizzare accessi in memoria.
+  Potremmo riassumere la memoria come una pinned dell'host, che è mappata negli indirizzi del device, senza quindi necessità di trasferimenti ( utile solo se la GPU non ha spazio oppure per pochissimi o addirittura 1 solo trasferimento, in quanto il bus PCI ha banda notevolmente ridotta rispetto alla banda della GPU)
 </details>
 
 <details>
@@ -41,7 +45,10 @@ Un altra cosa che puo influenzare occupancy sono i registri, per quanto siano la
 
 <details>
   <summary>Shared Memory VS Cache L1</summary>
-  La shared memory è controllata esplicitamente dal programmatore, mentre la cache L1 è gestita automaticamente dall'hardware.
+Memoria Condivisa e Cache L1 condividono lo stesso hardware on cip, ma tra loro ci sono differenze fondamentali, sui pattern di accesso, in quanto la SMEM utilizza i 32 banchi per l'accesso parallelo, mentre la cache si basa sulle linee per il caricamento, ed inoltre sul controllo, poichè al contrario della SMEM, la cache L1 non può essere minimamente toccata dal programmatore ed è interamente gestita dall hardware.
+  La configurazione ottimale ( es tramite Carvout ) di queste due dipende da esigenze del kernel:
+  -Piu SMEM => ideale per un uso intensivo di SMEM per ridurre latenza di accessi a global memory, attenzione all occupancy
+  -Piu Cache => piu utile quando il kernel fa accessi frequenti a dati globali con buona località spaziale, oppure per ottimizzare il register spilling
 </details>
 
 <details>
