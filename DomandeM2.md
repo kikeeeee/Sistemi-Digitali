@@ -17,13 +17,17 @@
 
 <details>
   <summary>Shared memory, come accedere (banchi) e come allocare</summary>
-  La shared memory è divisa in banchi di memoria, accessibili tramite il qualificatore __shared__, e viene allocata specificando il terzo parametro nel lancio del kernel.
+Memoria temporanea che funghe da canale di comunicazione per tutti i thread di un blocco, aumenta la banda disponibile e riduce la latenza, si trova piu vicina alle unità di un SM rispetto a una cache L2.
+  Ne viene allocata una quantita fissa ad ogni blocco di thread, all inizio della sua esecuzione, e dura tutto il ciclo di vita di un SM; gli accessi alla memoria avvengono per warp ( caso migliore 1 transazione, peggiore 32).
+  SMEM è una risorsa limitata che dipende dall architettura di una GPU, un uso eccessivo riduce il numero di blocchi di thread attivi concorrentemente, e quindi limita il parallelismo.
+  Dopo ogni elaborazione/caricamento, è necessario eseguire una sincronizzazione in quanto è possibile che altri thread debbano utilizzare quei dati.
+  L'allocazione può essere sia dinamica che statica, in base a se la Quantità di SMEM da allocare è nota al momento di compilazione ( variabile extern).
+  Per massimizzare la banda di memoria, la SMEM è divisa in 32 moduli di memoria di ugual dimensione chiamati banchi ( da 4/8 byte in base all architettua)  
 </details>
 
 <details>
   <summary>Occupancy (Definizione, Teorica VS Effettiva)</summary>
-  L'occupancy teorica è il massimo numero di warp attivi, mentre quella effettiva dipende dalle risorse effettivamente disponibili.
-</details>
+Un altra cosa che puo influenzare occupancy sono i registri, per quanto siano la memoria on chip piu veloce, ce un limite architetturale e vengono allocati dinamicamente tra warp attivi, influenzando l'occupancy; come per la shared memory un minor uso permette di avere piu blocchi concorrenti per SM, e quindi maggior occupancy; se invece si eccede il limite hardware questi vengono spostati in memoria locale, che è collocata nella stessa posizione della memoria globale e presenta alta latenza e bassa banda -> REGISTER SPILLING</details>
 
 <details>
   <summary>Zero-Copy Memory</summary>
@@ -47,7 +51,15 @@
 
 <details>
   <summary>Gerarchia di memoria CUDA</summary>
-  La memoria CUDA è gerarchica e include registri, shared memory, cache L1/L2, memoria globale e memoria host.
+Si compone cosi: 
+-Registri -> memoria piu veloce, privata per ogni thread usata per variabili temporanee
+-Shared Memory -> condivisa tra thread di un blocco per comunicazione e cooperazione
+-Caches -> memoria intermedia automatica, riduce tempi di accesso per dati usati frequentemente
+-Memoria Locale -> privata per ogni thread usata per grandi variabili o registri
+-Memoria Costante -> read only, dati che non cambiano
+-Memoria Texture -> read only, per accessi spazialmente coerenti ( es elaborazione imm)
+-Memoria Globale -> memoria piu grande e lenta
+Piu si va verso l'alto, piu le memorie sono veloci, con meno latenza, ma meno capienti.
 </details>
 
 <details>
@@ -133,17 +145,28 @@ Se AI < Bandwith => memory bound
 
 <details>
   <summary>Memoria pinned e memoria globale</summary>
-  La memoria pinned permette trasferimenti DMA più veloci rispetto alla memoria globale standard.
+La memoria allocata di default dall host è pageable ( soggetta a page fault ) ovvero che il sistema operativo puo spostare i dati della memoria virtuale host in diverse locazioni fisiche, di conseguenza la GPU non puo accedere con sicurezza a questi dati ( che potrebbero non essere in RAM ma sul disco -> ciò causa un ritardo significativo se il dato deve essere letto ).
+  Il trasferimento quindi avviene dal driver cuda, che alloca una memoria host pinned ( non soggetta a page fault , bloccata in ram ) , copia i dati dalla memoria in questa pinned e poi li trasferisce al device; la soluzione sarebbe allocare direttamente i dati in una memoria page locked, accessibile al device con larghezza di banda maggiore, ciò pero puo degradare le prestazioni del sistema host, poiche effettua grande pressione sulla RAM, i trasferimenti avvengono inoltre in maniera sincrona.
+  La memoria globale è uno spazio logico accessibile dal kernell, i dati dell applicazione risiedono nella DRAM del device, le ricbieste del kernel quindi sono gestite o da DRAM DEVICE oppure da memoria on chip dell SM, tutti gli accessi in memoria globale passano attraverso cache L2 e molti anche da L1.
+  Gli accessi possono essere
+  -Allineati -> indirizzo multiplo della dimensione di transazione
+  -Coalescenti -> quando i 32 thread di un warp accedono a un blocco di memoria contiguo, e l'HW puo combinarli in un numero ridotto di transazioni
+  -Allineati e Coalescenti -> insieme di questi due, ottimizza di molto il throughput
 </details>
 
 <details>
   <summary>Zero-Copy, UVA e UMA</summary>
-  Zero-Copy consente alla GPU di accedere direttamente alla RAM, UVA unifica gli spazi di indirizzo e UMA permette la gestione automatica della memoria.
+La memoria zero-copy è una tecnica che consente al device di accedere direttamente alla memoria dell host, senza copiare esplicitamente i dati ( eccezzione alle regole di mutua esclusività di memorie ).
+Sia host che device accedono quindi a questa memoria, tramite PCI express, con trasferimenti eseguiti implicitamente quando richiesti dal kernel, è ovviamente necessario Sincronizzare accessi in memoria.
+  Potremmo riassumere la memoria come una pinned che è mappata negli indirizzi del device, senza quindi necessità di trasferimenti ( utile solo se la GPU non ha spazio oppure per trasferimenti molto piccoli , altrimenti degradano le prestazioni)
+  La memoria UVA (Unified Virtual Addressing ) è una tecnica che permette a CPU e GPU di condividere lo stesso spazio di indirizzamento virtuale, non ci sono distinzioni tra puntatori host e device e ci pensa il runtime a mappare gli indirizzi virtuali a quelli fisici sulle rispettive memorie.
+  La memoria UMA ( Unified Memory Addressing ) utilizza MANAGED MEMORY, memoria gestita che si riferisce sempre ad una unified memory, gestita in modo automatico, migra automaticamente i dati tra host e device, completamente compatibile con allocazioni specifiche, permette di usare sia memoria managed che unmanaged, non sono piu necessari trasferimenti strani poiche si accede con lo stesso puntatore a tutto. L'allocazione avviene in modo lazy, le pagine vengono allocate solo al primo utilizzo e possono migrare in base alle necessità; il Driver cuda usa euristiche intelligenti per mantenere localita dei dati e minimizzare i page fault.
 </details>
 
 <details>
   <summary>Shared Memory vs Cache L1</summary>
-  La shared memory è gestita dal programmatore, mentre la cache L1 è automatica e migliora le performance della memoria globale.
+  Ogni SM ha memoria on-chip limitata condivisa tra shared memory e cache L1, ques'ultima si trova fra i thread block di un SM ed ha alta velocità e banda, con bassa latenza; comune quindi a tutte le sottopartizioni dell SM.
+  La shared memory è organizzata in memory banks di uguale dimensione che permettono l'accesso simultaneo a piu dati, a condizione che i thread leggano da indirizzi diversi su banchi distinti, evitando BANK CONFLICT.
 </details>
 
 <details>
