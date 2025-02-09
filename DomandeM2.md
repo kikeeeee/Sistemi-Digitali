@@ -30,7 +30,12 @@ Memoria temporanea che funghe da canale di comunicazione per tutti i thread di u
   L'allocazione può essere sia dinamica che statica, in base a se la Quantità di SMEM da allocare è nota al momento di compilazione ( variabile extern).
   La memoria è uno spazio di indirizzamento lineare, ma per massimizzare la banda di memoria, la SMEM è divisa in 32 moduli di memoria di ugual dimensione chiamati banchi ( da 4/8 byte in base all architettua) , essi sono 32 in quanto numero di thread di un warp, potendo permettere la lettura simultanea da parte di tutti i thread.
   -scenario ideale => operazione di lettura o scrittura emessa da un warp accede solo ad un indirizzo per banco, perfetto in quanto in un solo ciclo di clock effettuo tutti i trasferimenti
-  -scenario NON ideale => operazione di lettura o scrittura emessa da un warp accede a piu indirizzi per banco, necessario quindi effettuare piu transazioni di memoria in quanto un banco puo servire al massimo una richiesta
+  -scenario NON ideale => operazione di lettura o scrittura emessa da un warp accede a piu indirizzi per banco, necessario quindi effettuare piu transazioni di memoria in quanto un banco puo servire al massimo una richiesta.
+  I tipi di accesso possono essere di tre tipi: 
+  1) Parallelo ( ideale ) indirizzi presenti su diversi bank che potenzialmente possono essere lette in una sola operazione
+  2) Seriale (NON ideale) indirizzi presenti nello stesso bank che richiedono una serializzazione quindi delle operazioni di lettura
+  3) Broadcast , tutti i thread leggono lo stesso indirizzo, il dato quindi viene trasmesso in parallelo a tutti i thread , efficente per transazioni ( 1 ) ma inefficente uso della bandwith.
+
 </details>
 
 <details>
