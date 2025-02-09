@@ -75,15 +75,18 @@ Si compone cosi:
 -Shared Memory -> on chip, condivisa tra thread di un blocco per comunicazione e cooperazione
 -Caches -> memoria intermedia automatica, riduce tempi di accesso per dati usati frequentemente
 -Memoria Locale -> Off chip, alta latenza poiche risiede nello spazio della DRAM, privata per ogni thread usata per grandi variabili o registri spillati ( dati memorizzati anche in cache L1)
--Memoria Costante -> read only, dati che non cambiano
--Memoria Texture -> read only, per accessi spazialmente coerenti ( es elaborazione imm)
--Memoria Globale -> memoria piu grande e lenta
+-Memoria Costante -> Off chip,read only, dati che non cambiano, accessibile a tutti i thread di un kernel.
+-Memoria Texture -> Off chip,read only, per accessi spazialmente coerenti ( es elaborazione immagini)
+-Memoria Globale -> Off chip, memoria del device, caratterizzata da alta latenza e capacità, accessibile da ogni thread in ogni SM, 
 Piu si va verso l'alto, piu le memorie sono veloci, con meno latenza, ma meno capienti.
 </details>
 
 <details>
   <summary>Metodi per gestire i trasferimenti di memoria da host a device</summary>
-  I metodi includono memoria paginata, pinned memory, unified memory e zero-copy memory.
+1)pinned
+2)zero-copy
+3)UVA
+4)UM
 </details>
 
 <details>
