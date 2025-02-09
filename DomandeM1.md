@@ -29,36 +29,59 @@ La mantissa quindi rappresenta il valore, spesso normalizzato in notazione scien
 
 <details>
   <summary>Cordic e "Trucco" subnormali</summary>
-  Il CORDIC usa iterazioni successive per calcolare funzioni trigonometriche ed esponenziali con operazioni di somma e shift.
-</details>
+Algoritmo che permette di calcolare funzioni matematiche complesse
+utilizzando operazioni logiche e aritmetiche semplici con interi (utilizzi
+notevoli con missione apollo; inizalmente cpu intel calcolatore con solo
+operazioni intere, per utilizzare floating point bisogna acquistare un
+coprocessore matematico → i calcoli di questo coprocessore venivano
+svolti grazie a questo algoritmo)
+Il metodo CORDIC è un processo iterativo, dove ad ogni iterazioni si esegue
+la somma o sottrazione di un valore notevole, a seconda se si è superato il
+valore da calcolare o meno. Per esempio, se si vuole calcolare il cos(58), si
+può eseguire:
+1° iterazione -> 45°
+2° iterazione -> 22,5°
+3° iterazione -> 11,25°
+Nonostante ciò, per il calcolo della funzione goniometrica sono necessarie
+altre moltiplicazioni, quelle tra i valori delle funzioni goniometriche. Questi
+valori prendono il nome di cordic gain e sono costanti prendendo in
+considerazioni lo stesso numero iterazioni (cambiando il numero di
+iterazioni cambia il numero di fattori e di conseguenza anche il valore del
+cordic gain). Per questo motivo i valori possono essere precomputati e la
+moltiplicazione può anche essere eseguita via software, salvati quindi in LUT</details>
 
 <details>
   <summary>FPGA (anche che tipi di memorie hanno)</summary>
-  Le FPGA utilizzano vari tipi di memoria come BRAM, DRAM ed EEPROM per archiviare dati e configurazioni.
-</details>
+Field Programmate
+Dispositivi programmabili tramite linguaggio HDL ma anche ad alto livello come C e C++, con la possibilità di essere programmate in modo specifico con prestazioni migliori e minor consumo di energia
+Cosituite da un insieme di CLB, unita esecutiva Configurable Logic Block, a loro volta composta da slice, che sono insiemi di Logic Cell: formata un Mux, una LUT ( funge da rete combinatoria programmabile) e un FlipFlop, inoltre unità moltiplicative ( NO FLOATING POINT ) e RAM.</details>
 
 <details>
   <summary>GRS per approssimazione float</summary>
-  Il metodo GRS (Guard, Round, Sticky) è usato negli arrotondamenti dei numeri floating point per migliorare l'accuratezza.
-</details>
-
-<details>
-  <summary>Come vengono gestiti gli arrotondamenti nei float?</summary>
-  Gli arrotondamenti nei float seguono le modalità definite dallo standard IEEE 754, inclusi "round to nearest" e "truncate".
-</details>
+EEE 754 definisce uno standard anche per quanto riguarda l’arrotondamento, altrimenti due calcolatori diversi potrebbero produrre
+risultati diversi con gli stessi numeri.
+Nello specifico lo fa tramite tre bit nascosti, ovvero Guard (G), Round (R) e Sticky (S). Essi sono concatenati all’estremità destra per
+decidere se il +1 sia necessario oppure no</details>
 
 <details>
   <summary>Metodi efficienti per rappresentare reali su FPGA (Fixed-Point/BFloat/CORDIC)</summary>
-  Su FPGA, i numeri reali possono essere rappresentati in diversi modi come Fixed-Point, BFloat e CORDIC, ognuno con vantaggi in termini di precisione e utilizzo di risorse.
-</details>
+Cordic, Fixed Point e altri formati FP, sicuramente piu leggeri rispetto IEEE 754 32/64 bit </details>
 
 <details>
   <summary>Fixed-Point</summary>
   Il formato Fixed-Point rappresenta i numeri con una precisione fissa, risultando efficiente in hardware ma meno flessibile del floating point.
+  Il loro limite principale è l'intervallo limitato ( -2 <sup>k</sup> ; 2<sup>k</sup> k cifre intere) ma ciò rappresenta anche il suo punto di forza, ovvero una precisione costante lungo tutto il range rappresentabile, al contrario invece di FP.
 </details>
 
 <details>
   <summary>Weight Sharing (relativa al mio progetto)</summary>
+   Tecnica con lʼobbiettivo di memorizzare un numero
+minore di pesi. Infatti, partendo da una griglia di pesi, si può ricavare dei
+cluster di i pesi simili tra loro e per ciascun cluster si può calcolare il
+rispettivo centroide (una sorta di valore medio). In questo modo, al posto di
+memorizzare i singoli pesi, si possono memorizzare solamente i centroidi
+ed una tabella di lookup che per ogni peso iniziale indica il centroide con il
+quale è stato sostituito.
 </details>
 
 <details>
@@ -66,6 +89,6 @@ La mantissa quindi rappresenta il valore, spesso normalizzato in notazione scien
 1) Quantizzazione dei Dati
   Passare per esempio da FP32 a E5M2 riduce la memory footprint di 1/4, con il difetto che la rete risultante sara molto meno accurata di quella originale e necessiterà di un fine tuning.
 2) Weight Sharing o Paletizzation
-  Tecnica per ridurre il consumo di memoria utilizzando un n
+  Tecnica per ridurre il consumo di memoria utilizzando un numero ridotto di pesi
 3) Utilizzazione di Interi o Fixed Point
 </details>
