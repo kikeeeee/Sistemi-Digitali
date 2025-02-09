@@ -7,7 +7,10 @@ SIMD invece esegue lo stesso flusso di istruzioni su piu dati in modo parallelo,
 
 <details>
   <summary>Warp scheduler e dispatcher</summary>
-  Il warp scheduler gestisce l'esecuzione dei warp nei CUDA core, mentre il dispatcher assegna i compiti ai diversi multiprocessori.
+Il warp scheduler è una componente essenziale dell'architettura CUDA che si occupa della gestione e dell'esecuzione dei warps, gruppi di 32 thread che operano in parallelo nei Streaming Multiprocessors (SM) delle GPU NVIDIA. Ogni SM dispone di più scheduler. Il compito dello scheduler è selezionare un warp e tra quelli eleggibili e inviarlo alle unità di esecuzione, gestendo la priorità minimizzando la latenza. Se un warp è in attesa di dati, ad esempio per un accesso a memoria globale, lo scheduler può passare a un altro warp pronto per l'esecuzione, detto eleggibile ( LATENCY HIDING ). Questo meccanismo è fondamentale per nascondere la latenza delle operazioni di memoria e massimizzare il throughput della GPU. In uno scenario ideale, il numero di warps attivi per scheduler dovrebbe essere sufficiente a coprire le latenze delle istruzioni, garantendo un utilizzo costante delle unità computazionali.
+  La dispatcher unit lavora a comando dello scheduler ed è responsabile della decodifica delle istruzioni del warp, assegnando successivamente i thread del warp alle relative unità di calcolo
+
+L’efficienza di questo meccanismo dipende dalla capacità di mantenere un numero sufficiente di warps attivi per nascondere le latenze e sfruttare al massimo le risorse della GPU. Se il numero di warps attivi è troppo basso, gli scheduler possono rimanere inattivi, causando un sottoutilizzo delle unità computazionali. Al contrario, un numero eccessivo di warps può portare a competizione per le risorse di memoria e registri, riducendo l'efficienza. Un aspetto critico dell'ottimizzazione CUDA è quindi trovare un equilibrio tra questi fattori, minimizzando la divergenza dei warps e garantendo un accesso efficiente alla memoria​.
 </details>
 
 <details>
